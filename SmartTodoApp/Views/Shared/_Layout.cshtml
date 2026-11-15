@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#f6f7fb" />
+    <meta name="theme-color" content="#080b18" />
     <title>@ViewData["Title"] - Clearlist</title>
     <script type="importmap"></script>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
@@ -11,6 +11,12 @@
     <link rel="stylesheet" href="~/SmartTodoApp.styles.css" asp-append-version="true" />
 </head>
 <body>
+    <div class="ambient-scene" aria-hidden="true">
+        <span class="scene-orb scene-orb--violet"></span>
+        <span class="scene-orb scene-orb--cyan"></span>
+        <span class="scene-ring"></span>
+        <span class="scene-grid"></span>
+    </div>
     <header class="site-header">
         <nav class="topbar" aria-label="Main navigation">
             <a class="brand" asp-area="" asp-controller="Home" asp-action="Index" aria-label="Clearlist home">
@@ -30,6 +36,7 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/tilt.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
