@@ -1,50 +1,78 @@
 ﻿@model IEnumerable<SmartTodoApp.Models.TodoItem>
 
 @{
-    ViewData["Title"] = "Smart To-Do List";
+    ViewData["Title"] = "My Tasks";
+    var tasks = Model?.ToList() ?? new List<SmartTodoApp.Models.TodoItem>();
 }
 
-<div class="container mt-5" style="max-width: 700px;">
-    <div class="text-center mb-4">
-        <h1 class="fw-bold text-primary">📝 Smart To-Do App</h1>
-        <p class="text-muted">Manage your daily tasks easily with ASP.NET Core & SQLite</p>
-    </div>
-
-    <!-- Task Add Form -->
-    <div class="card shadow-sm mb-4 border-0 bg-light">
-        <div class="card-body">
-            <form asp-action="Add" method="post" class="row g-2">
-                <div class="col-md-9">
-                    <input type="text" name="title" class="form-control form-control-lg" placeholder="What needs to be done?" required autocomplete="off" />
-                </div>
-                <div class="col-md-3">
-                    <button type="submit" class="btn btn-primary btn-lg w-100 shadow-sm">Add Task</button>
-                </div>
-            </form>
+<section class="todo-dashboard" aria-labelledby="page-title">
+    <div class="dashboard-intro">
+        <div>
+            <span class="eyebrow">YOUR PERSONAL WORKSPACE</span>
+            <h1 id="page-title">Make room for <span>what matters.</span></h1>
+            <p>Keep your day clear, focused, and moving forward.</p>
+        </div>
+        <div class="task-summary" aria-label="@tasks.Count task@(tasks.Count == 1 ? "" : "s") in your list">
+            <span class="summary-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none"><path d="M8 5h11M8 12h11M8 19h11M4 5h.01M4 12h.01M4 19h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" /></svg>
+            </span>
+            <span><strong>@tasks.Count</strong><small>task@(tasks.Count == 1 ? "" : "s") on your list</small></span>
         </div>
     </div>
 
-    <!-- Task List -->
-    <div class="card shadow-sm border-0">
-        <div class="card-body p-0">
-            <ul class="list-group list-group-flush">
-                @if (Model != null && Model.Any())
+    <section class="composer-card" aria-labelledby="composer-title">
+        <div class="composer-heading">
+            <span class="composer-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" /></svg>
+            </span>
+            <div>
+                <h2 id="composer-title">Add a task</h2>
+                <p>What would you like to get done?</p>
+            </div>
+        </div>
+        <form asp-action="Add" method="post" class="task-form">
+            <label class="visually-hidden" for="task-title">Task name</label>
+            <input id="task-title" type="text" name="title" class="task-input" placeholder="e.g. Plan the week ahead" required autocomplete="off" maxlength="200" />
+            <button type="submit" class="add-task-button">
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" /></svg>
+                <span>Add task</span>
+            </button>
+        </form>
+    </section>
+
+    <section class="tasks-card" aria-labelledby="tasks-heading">
+        <div class="tasks-header">
+            <div>
+                <span class="eyebrow">STAY ON TRACK</span>
+                <h2 id="tasks-heading">Your task list</h2>
+            </div>
+            <span class="task-count">@tasks.Count total</span>
+        </div>
+
+        @if (tasks.Count > 0)
+        {
+            <ul class="task-list">
+                @foreach (var item in tasks)
                 {
-                    foreach (var item in Model)
-                    {
-                        <li class="list-group-item d-flex justify-content-between align-items-center py-3 px-4">
-                            <span class="fs-5 text-dark">@item.Title</span>
-                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-danger btn-sm px-3">Delete</a>
-                        </li>
-                    }
-                }
-                else
-                {
-                    <li class="list-group-item text-center py-4 text-muted">
-                        No tasks yet. Add one above to get started! 🚀
+                    <li class="task-row">
+                        <span class="task-marker" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M8 12.5 10.8 15 16.5 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg></span>
+                        <span class="task-title">@item.Title</span>
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="delete-task" aria-label="Delete @item.Title" title="Delete task">
+                            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 7h16M10 11v6m4-6v6M5.5 7l1 13h11l1-13M9 7V4h6v3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /></svg>
+                        </a>
                     </li>
                 }
             </ul>
-        </div>
-    </div>
-</div>
+        }
+        else
+        {
+            <div class="empty-state">
+                <span class="empty-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M8 5h11M8 12h11M8 19h11M4 5h.01M4 12h.01M4 19h.01" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" /></svg></span>
+                <h3>A fresh start</h3>
+                <p>Your list is clear. Add your first task above and take it one step at a time.</p>
+            </div>
+        }
+    </section>
+
+    <p class="dashboard-note"><span class="note-dot" aria-hidden="true"></span> Small steps make meaningful progress.</p>
+</section>
